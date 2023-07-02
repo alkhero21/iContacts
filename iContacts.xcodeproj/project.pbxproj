@@ -56,15 +56,39 @@
 		D0C73BED2A5163AF006880FB /* iContacts */ = {
 			isa = PBXGroup;
 			children = (
-				D0C73BEE2A5163AF006880FB /* AppDelegate.swift */,
-				D0C73BF02A5163AF006880FB /* SceneDelegate.swift */,
-				D0C73BF22A5163AF006880FB /* ViewController.swift */,
-				D0C73BF42A5163AF006880FB /* Main.storyboard */,
-				D0C73BF72A5163B2006880FB /* Assets.xcassets */,
-				D0C73BF92A5163B2006880FB /* LaunchScreen.storyboard */,
-				D0C73BFC2A5163B2006880FB /* Info.plist */,
+				D0C73C032A51672E006880FB /* App */,
+				D0C73C042A51678E006880FB /* View */,
+				D0C73C052A5167AC006880FB /* Resource */,
 			);
 			path = iContacts;
+			sourceTree = "<group>";
+		};
+		D0C73C032A51672E006880FB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D0C73BF92A5163B2006880FB /* LaunchScreen.storyboard */,
+				D0C73BEE2A5163AF006880FB /* AppDelegate.swift */,
+				D0C73BF02A5163AF006880FB /* SceneDelegate.swift */,
+				D0C73BFC2A5163B2006880FB /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		D0C73C042A51678E006880FB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D0C73BF22A5163AF006880FB /* ViewController.swift */,
+				D0C73BF42A5163AF006880FB /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D0C73C052A5167AC006880FB /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				D0C73BF72A5163B2006880FB /* Assets.xcassets */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -289,7 +313,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9X3WBY9BN8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iContacts/Info.plist;
+				INFOPLIST_FILE = iContacts/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -317,7 +341,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 9X3WBY9BN8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = iContacts/Info.plist;
+				INFOPLIST_FILE = iContacts/App/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
