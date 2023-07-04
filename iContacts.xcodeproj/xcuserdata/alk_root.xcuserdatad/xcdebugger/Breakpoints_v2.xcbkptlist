@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "B50CB6DB-99EE-4482-BCD3-7135E132F46B"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1A335AF3-9D7E-4B8B-8A3F-7406F587D1E3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iContacts/View/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "57"
+            endingLineNumber = "57"
+            landmarkName = "addContactAlert()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73044B94-413E-4C93-ABEF-BE96B14773F0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iContacts/View/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "64"
+            endingLineNumber = "64"
+            landmarkName = "addContactAlert()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "73044B94-413E-4C93-ABEF-BE96B14773F0 - 641ed7288aa51a09"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iContacts.ViewController.addContactAlert() -&gt; ()"
+                  moduleName = "iContacts"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alk_root/Desktop/iOS%20apps/iContacts/iContacts/View/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "60"
+                  endingLineNumber = "60"
+                  offsetFromSymbolStart = "872">
+               </Location>
+               <Location
+                  uuid = "73044B94-413E-4C93-ABEF-BE96B14773F0 - 641ed7288aa51a2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iContacts.ViewController.addContactAlert() -&gt; ()"
+                  moduleName = "iContacts"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alk_root/Desktop/iOS%20apps/iContacts/iContacts/View/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "61"
+                  endingLineNumber = "61"
+                  offsetFromSymbolStart = "872">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "99D14DA0-E958-4487-BD28-8D4D9B9CA850"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iContacts/View/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "add(name:lastName:phone:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "99D14DA0-E958-4487-BD28-8D4D9B9CA850 - c40143a2d0ff4fcf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iContacts.ViewController.add(contact: iContacts.Contact) -&gt; ()"
+                  moduleName = "iContacts"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alk_root/Desktop/iOS%20apps/iContacts/iContacts/View/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "72"
+                  endingLineNumber = "72"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "99D14DA0-E958-4487-BD28-8D4D9B9CA850 - f4703712051d980f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "iContacts.ViewController.add(name: Swift.String, lastName: Swift.String, phone: Swift.String) -&gt; ()"
+                  moduleName = "iContacts"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/alk_root/Desktop/iOS%20apps/iContacts/iContacts/View/ViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "73"
+                  endingLineNumber = "73"
+                  offsetFromSymbolStart = "120">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "816A1E73-AF45-43FC-9719-53609BABE3B8"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iContacts/View/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "97"
+            endingLineNumber = "97"
+            landmarkName = "getAllContacts()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D7A14FB7-36B9-4A3E-AB86-D0BC23AEB37E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "iContacts/View/ViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "addUserAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
