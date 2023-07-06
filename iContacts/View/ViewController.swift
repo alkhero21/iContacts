@@ -7,23 +7,36 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDataSource {
+    
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     static let contactKey: String = "userContacts"
     
+    var allContactsArrayOfDictionaries: [[String:Any]] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        getAllContacts()
+//        getAllContacts()
+        
+        tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: "cellIdentifier")
+        tableView.dataSource = self
+        tableView.rowHeight = 46
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        getAllContacts()
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        getAllContacts()
+    }
     
     func addContactAlert() {
         let alertController = UIAlertController(title: "AddContact", message: nil, preferredStyle: .alert)
@@ -49,6 +62,11 @@ class ViewController: UIViewController {
                 return
             }
             guard let phone: String = alertController.textFields![2].text, !phone.isEmpty else {
+                self.showErrorAlert(message: "Phone number is invalid")
+                return
+            }
+            
+            guard phone.isValidPhoneNumber() else {
                 self.showErrorAlert(message: "Phone number is invalid")
                 return
             }
@@ -93,7 +111,8 @@ class ViewController: UIViewController {
             return
         }
         
-        print("allContactsArrayOfDictionaries: \(allContactsArrayOfDictionaries)")
+        self.allContactsArrayOfDictionaries = allContactsArrayOfDictionaries
+
 
     }
     
@@ -108,6 +127,34 @@ class ViewController: UIViewController {
 
     @IBAction func addUserAction(_ sender: Any) {
         addContactAlert()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return allContactsArrayOfDictionaries.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! ContactTableViewCell
+        let dictionary:[String: Any] = allContactsArrayOfDictionaries[indexPath.row]
+        
+        if let firstName = dictionary["firstName"] as? String, let secondName = dictionary["lastName"] as? String {
+            cell.contactTextLabel.text = "\(firstName) \(secondName)"
+        }
+        
+        return cell
+    }
+}
+
+
+extension String {
+    
+    // Возвращает 'true' если номер телефона валидный, 'false' в ином случае
+    func isValidPhoneNumber() -> Bool {
+        
+        let regEx = "^\\+(?:[0-9]?){6,14}[0-9]$"
+        let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
+        
+        return phoneCheck.evaluate(with: self)
     }
 }
 
