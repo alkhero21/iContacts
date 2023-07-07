@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D03D11C02A581DF500ACC34C /* ContactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03D11BE2A581DF500ACC34C /* ContactViewController.swift */; };
+		D03D11C12A581DF500ACC34C /* ContactViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D03D11BF2A581DF500ACC34C /* ContactViewController.xib */; };
 		D0C73BEF2A5163AF006880FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C73BEE2A5163AF006880FB /* AppDelegate.swift */; };
 		D0C73BF12A5163AF006880FB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C73BF02A5163AF006880FB /* SceneDelegate.swift */; };
 		D0C73BF32A5163AF006880FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0C73BF22A5163AF006880FB /* ViewController.swift */; };
@@ -18,6 +20,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D03D11BE2A581DF500ACC34C /* ContactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactViewController.swift; sourceTree = "<group>"; };
+		D03D11BF2A581DF500ACC34C /* ContactViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ContactViewController.xib; sourceTree = "<group>"; };
 		D0C73BEB2A5163AF006880FB /* iContacts.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iContacts.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0C73BEE2A5163AF006880FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D0C73BF02A5163AF006880FB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +89,8 @@
 				D0C73BF42A5163AF006880FB /* Main.storyboard */,
 				D0F799842A56E3AC004A1187 /* ContactTableViewCell.swift */,
 				D0F799852A56E3AC004A1187 /* ContactTableViewCell.xib */,
+				D03D11BE2A581DF500ACC34C /* ContactViewController.swift */,
+				D03D11BF2A581DF500ACC34C /* ContactViewController.xib */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -156,6 +162,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0F799872A56E3AC004A1187 /* ContactTableViewCell.xib in Resources */,
+				D03D11C12A581DF500ACC34C /* ContactViewController.xib in Resources */,
 				D0C73BFB2A5163B2006880FB /* LaunchScreen.storyboard in Resources */,
 				D0C73BF82A5163B2006880FB /* Assets.xcassets in Resources */,
 				D0C73BF62A5163AF006880FB /* Main.storyboard in Resources */,
@@ -173,6 +180,7 @@
 				D0C73BF32A5163AF006880FB /* ViewController.swift in Sources */,
 				D0C73BEF2A5163AF006880FB /* AppDelegate.swift in Sources */,
 				D0C73BF12A5163AF006880FB /* SceneDelegate.swift in Sources */,
+				D03D11C02A581DF500ACC34C /* ContactViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
