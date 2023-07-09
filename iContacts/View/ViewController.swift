@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -30,6 +30,8 @@ class ViewController: UIViewController, UITableViewDataSource {
         tableView.register(UINib(nibName: "ContactTableViewCell", bundle: nil), forCellReuseIdentifier: "cellIdentifier")
         tableView.dataSource = self
         tableView.rowHeight = 46
+        
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -129,19 +131,37 @@ class ViewController: UIViewController, UITableViewDataSource {
         addContactAlert()
     }
     
+    func getSingleContactUser(index: Int) -> String? {
+        let dictionary:[String: Any] = allContactsArrayOfDictionaries[index]
+        
+        guard let firstName = dictionary["firstName"] as? String, let secondName = dictionary["lastName"] as? String  else{
+            return nil
+        }
+        
+        let text = "\(firstName) \(secondName)"
+        return text
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allContactsArrayOfDictionaries.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! ContactTableViewCell
-        let dictionary:[String: Any] = allContactsArrayOfDictionaries[indexPath.row]
         
-        if let firstName = dictionary["firstName"] as? String, let secondName = dictionary["lastName"] as? String {
-            cell.contactTextLabel.text = "\(firstName) \(secondName)"
-        }
+        cell.contactTextLabel.text = getSingleContactUser(index: indexPath.row)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("User selected row: \(indexPath.row)")
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let viewController = ContactViewController()
+        viewController.text = getSingleContactUser(index: indexPath.row)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
