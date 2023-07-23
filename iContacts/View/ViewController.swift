@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ViewController: UIViewController {
     
     
     @IBOutlet weak var tableView: UITableView!
@@ -32,6 +32,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.rowHeight = 46
         
         tableView.delegate = self
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(getAllContacts), for: .valueChanged)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -100,7 +102,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         userDefaults.set(userContactsArray, forKey: ViewController.contactKey)
     }
     
-    func getAllContacts() {
+    @objc func getAllContacts() {
         let userDefaults = UserDefaults.standard
         
         guard let allContacts = UserDefaults.standard.array(forKey: ViewController.contactKey) else {
@@ -112,7 +114,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             print("Couldn't convert Any to [[String:Any]]")
             return
         }
-        
+        tableView.refreshControl?.endRefreshing()
         self.allContactsArrayOfDictionaries = allContactsArrayOfDictionaries
 
 
@@ -124,9 +126,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return array ?? []
     }
     
-    
-
-
     @IBAction func addUserAction(_ sender: Any) {
         addContactAlert()
     }
@@ -142,6 +141,25 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return text
     }
     
+    
+    
+}
+
+
+extension String {
+    
+    // Возвращает 'true' если номер телефона валидный, 'false' в ином случае
+    func isValidPhoneNumber() -> Bool {
+        
+        let regEx = "^\\+(?:[0-9]?){6,14}[0-9]$"
+        let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
+        
+        return phoneCheck.evaluate(with: self)
+    }
+}
+
+// MARK: UITableViewDataSourse & UITableViewDelegate
+extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allContactsArrayOfDictionaries.count
@@ -162,19 +180,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let viewController = ContactViewController()
         viewController.text = getSingleContactUser(index: indexPath.row)
         navigationController?.pushViewController(viewController, animated: true)
-    }
-}
-
-
-extension String {
-    
-    // Возвращает 'true' если номер телефона валидный, 'false' в ином случае
-    func isValidPhoneNumber() -> Bool {
-        
-        let regEx = "^\\+(?:[0-9]?){6,14}[0-9]$"
-        let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
-        
-        return phoneCheck.evaluate(with: self)
     }
 }
 
