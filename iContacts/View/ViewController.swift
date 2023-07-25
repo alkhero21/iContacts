@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     static let contactKey: String = "userContacts"
     
-    var allContactsArrayOfDictionaries: [[String:Any]] = [] {
+    var allContactsArrayOfDictionaries: [Contact] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -76,7 +76,8 @@ class ViewController: UIViewController {
             }
             
 
-            self.add(name: firstName, lastName: lastName, phone: phone)
+//            self.add(name: firstName, lastName: lastName, phone: phone)
+            self.saveContactAsStruct(firstName: firstName, lastName: lastName, phone: phone)
         }
         alertController.addAction(addAction)
         
@@ -103,19 +104,10 @@ class ViewController: UIViewController {
     }
     
     @objc func getAllContacts() {
-        let userDefaults = UserDefaults.standard
         
-        guard let allContacts = UserDefaults.standard.array(forKey: ViewController.contactKey) else {
-            print("UserDefaults doesn't contain array with key: userContacts")
-            return
-        }
         
-        guard let allContactsArrayOfDictionaries = allContacts as? [[String:Any]] else {
-            print("Couldn't convert Any to [[String:Any]]")
-            return
-        }
         tableView.refreshControl?.endRefreshing()
-        self.allContactsArrayOfDictionaries = allContactsArrayOfDictionaries
+        self.allContactsArrayOfDictionaries = getAllContactsStruct()
 
 
     }
@@ -131,14 +123,46 @@ class ViewController: UIViewController {
     }
     
     func getSingleContactUser(index: Int) -> String? {
-        let dictionary:[String: Any] = allContactsArrayOfDictionaries[index]
+        let userContact:Contact = allContactsArrayOfDictionaries[index]
         
-        guard let firstName = dictionary["firstName"] as? String, let secondName = dictionary["lastName"] as? String  else{
-            return nil
+        
+        
+        let text = "\(userContact.firstName) \(userContact.lastName)"
+        return text
+    }
+    
+    func saveContactAsStruct(firstName: String, lastName: String, phone: String) {
+        let userContact: Contact = Contact(firstName: firstName, lastName: lastName, phone: phone)
+        let userContactArray: [Contact] = getAllContactsStruct() + [userContact]
+        
+        do{
+            
+            let encoder = JSONEncoder()
+            let encodedData = try encoder.encode(userContactArray)
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(encodedData, forKey: ViewController.contactKey)
+            
+        }catch{
+            print("Couldn't encode given [Contact] into data with error \(error.localizedDescription)")
+        }
+    }
+    
+    func getAllContactsStruct() -> [Contact] {
+        var result: [Contact] = []
+        
+        let userDefaults = UserDefaults.standard
+        if let data = userDefaults.object(forKey: ViewController.contactKey) as? Data {
+            do {
+                
+                let decoder = JSONDecoder()
+                result = try decoder.decode([Contact].self, from: data)
+                
+            }catch {
+                print("couldn't decode given data to [Contact] with error: \(error.localizedDescription)")
+            }
         }
         
-        let text = "\(firstName) \(secondName)"
-        return text
+        return result
     }
     
     
@@ -184,7 +208,11 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-
+struct Contact: Codable {
+    let firstName: String
+    let lastName: String
+    let phone: String
+}
 
 
 

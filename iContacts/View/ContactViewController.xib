@@ -17,6 +17,7 @@
                 <outlet property="initialsLabel" destination="1nS-40-dgR" id="6uw-7n-qvs"/>
                 <outlet property="mailStackView" destination="Lac-iN-Dv9" id="LQW-bu-9cK"/>
                 <outlet property="messageStackView" destination="W0e-UC-fG3" id="u8e-H2-dyr"/>
+                <outlet property="numberText" destination="a68-MT-OqR" id="8ST-CQ-DAO"/>
                 <outlet property="phoneStackView" destination="HLD-5k-57B" id="Syw-Z8-tgB"/>
                 <outlet property="progressView" destination="apW-LW-exa" id="5pm-HF-T1i"/>
                 <outlet property="undoDeleteButton" destination="dGp-Sa-wvH" id="wQ3-rt-wRh"/>

@@ -20,11 +20,16 @@ class ContactViewController: UIViewController {
     @IBOutlet weak var phoneStackView: UIStackView!
     @IBOutlet weak var undoDeleteButton: UIButton!
     @IBOutlet weak var deleteContactButton: UIButton!
+    @IBOutlet weak var numberText: UIButton!
     
+    var contact: Contact!
     var text: String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        setupContact()
         
         messageStackView.layer.cornerRadius = 5
         callStackView.layer.cornerRadius = 5
@@ -35,7 +40,16 @@ class ContactViewController: UIViewController {
         deleteContactButton.layer.cornerRadius = 5
 
         // Do any additional setup after loading the view.
+        
+        
+        
+    }
+    
+    
+    func setupContact() {
         fullNameLabel.text = text
+//        initialsLabel.text = "\(contact.firstName.first!) \(contact.lastName.first!)"
+//        numberText.setTitle(contact.phone, for: .normal)
     }
 
 }
