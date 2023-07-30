@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     
     static let contactKey: String = "userContacts"
     
-    var allContactsArrayOfDictionaries: [Contact] = [] {
+    var allContactsArrayOfDictionaries: [ContactGroup] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -41,6 +41,12 @@ class ViewController: UIViewController {
         
         getAllContacts()
     }
+    
+    @IBAction func segmentedControlValueChanged(_ sender: Any) {
+        getAllContacts()
+    }
+    
+    
     
     func addContactAlert() {
         let alertController = UIAlertController(title: "AddContact", message: nil, preferredStyle: .alert)
@@ -101,14 +107,58 @@ class ViewController: UIViewController {
         
         let userDefaults = UserDefaults.standard
         userDefaults.set(userContactsArray, forKey: ViewController.contactKey)
+        self.getAllContacts()
     }
     
     @objc func getAllContacts() {
         
+        tableView.refreshControl?.beginRefreshing()
         
-        tableView.refreshControl?.endRefreshing()
-        self.allContactsArrayOfDictionaries = getAllContactsStruct()
+        var dictionary: [String: [Contact]] = [:]
+        
+        let allContacts = getAllContactsStruct()
+        
+        allContacts.forEach{ contact in
+            var key: String!
+            
+            if segmentedControl.selectedSegmentIndex == 0 {
+                key = String(contact.firstName.first!)
+            }else if segmentedControl.selectedSegmentIndex == 1 {
+                key = String(contact.lastName.first!)
+            }
+            
+            if var existingContacts = dictionary[key] {
+                existingContacts.append(contact)
+                dictionary[key] = existingContacts
+            }else {
+                dictionary[key] = [contact]
+            }
+            
+        }
+        
+        var arrayOfContactGroup: [ContactGroup] = []
+        
+        let alphabeticallyOrderedKeys: [String] = dictionary.keys.sorted { key1, key2 in
+            return key1 < key2
+        }
+        
+        alphabeticallyOrderedKeys.forEach { key in
+            let contacts = dictionary[key]
+            let contactGroup = ContactGroup(title: key, contacts: contacts!)
+            arrayOfContactGroup.append(contactGroup)
+        }
+        
+        
+        tableView.refreshControl!.endRefreshing()
+        self.allContactsArrayOfDictionaries = arrayOfContactGroup
 
+
+    }
+    
+    func getContact(indexPath:IndexPath) -> Contact {
+        let contactGroup = allContactsArrayOfDictionaries[indexPath.section]
+        let contact = contactGroup.contacts[indexPath.row]
+        return contact
 
     }
     
@@ -122,14 +172,20 @@ class ViewController: UIViewController {
         addContactAlert()
     }
     
-    func getSingleContactUser(index: Int) -> String? {
-        let userContact:Contact = allContactsArrayOfDictionaries[index]
-        
-        
-        
-        let text = "\(userContact.firstName) \(userContact.lastName)"
-        return text
-    }
+//    func getSingleContactUser(index: Int) -> String? {
+//        let userContact:Contact = allContactsArrayOfDictionaries[index]
+//
+//
+//
+//        let text = "\(userContact.firstName) \(userContact.lastName)"
+//        return text
+//    }
+//
+//    func getSingleContactUserLastName(index: Int) -> String? {
+//        let userContact : Contact = allContactsArrayOfDictionaries[index]
+//        let text = "\(userContact.lastName) \(userContact.firstName)"
+//        return text
+//    }
     
     func saveContactAsStruct(firstName: String, lastName: String, phone: String) {
         let userContact: Contact = Contact(firstName: firstName, lastName: lastName, phone: phone)
@@ -185,16 +241,29 @@ extension String {
 // MARK: UITableViewDataSourse & UITableViewDelegate
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return allContactsArrayOfDictionaries.count
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return allContactsArrayOfDictionaries[section].contacts.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellIdentifier", for: indexPath) as! ContactTableViewCell
+        let contact = getContact(indexPath: indexPath)
         
-        cell.contactTextLabel.text = getSingleContactUser(index: indexPath.row)
+        if segmentedControl.selectedSegmentIndex == 0 {
+            cell.contactTextLabel.text = "\(contact.firstName) \(contact.lastName)"
+        }else if segmentedControl.selectedSegmentIndex == 1 {
+            cell.contactTextLabel.text = "\(contact.lastName) \(contact.firstName)"
+        }
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return allContactsArrayOfDictionaries[section].title
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -202,7 +271,8 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let viewController = ContactViewController()
-        viewController.text = getSingleContactUser(index: indexPath.row)
+        let contact = getContact(indexPath: indexPath)
+        viewController.text = "\(contact.firstName) \(contact.lastName)"
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
@@ -215,5 +285,8 @@ struct Contact: Codable {
 }
 
 
-
+struct ContactGroup {
+    let title: String
+    var contacts: [Contact]
+}
 
