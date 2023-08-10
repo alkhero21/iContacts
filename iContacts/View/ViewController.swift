@@ -13,13 +13,15 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    static let contactKey: String = "userContacts"
+    
     
     var allContactsArrayOfDictionaries: [ContactGroup] = [] {
         didSet {
             tableView.reloadData()
         }
     }
+    
+    let contactManager = ContactManager()
     
 
     override func viewDidLoad() {
@@ -82,9 +84,10 @@ class ViewController: UIViewController {
             }
             
 
-//            self.add(name: firstName, lastName: lastName, phone: phone)
-            self.saveContactAsStruct(firstName: firstName, lastName: lastName, phone: phone)
+            let contact = Contact(firstName: firstName, lastName: lastName, phone: phone)
+            self.add(contact: contact)
         }
+        
         alertController.addAction(addAction)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -101,12 +104,13 @@ class ViewController: UIViewController {
         present(errorAlertController, animated: true)
     }
     
-    func add(name: String, lastName: String, phone: String) {
-        let userContacts: [String: Any] = ["firstName": name, "lastName": lastName, "phone": phone]
-        let userContactsArray: [[String: Any]] = getAllContactsArray() + [userContacts]
-        
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(userContactsArray, forKey: ViewController.contactKey)
+    func add(contact:Contact) {
+        contactManager.add(contact: contact)
+//        let userContacts: [String: Any] = ["firstName": name, "lastName": lastName, "phone": phone]
+//        let userContactsArray: [[String: Any]] = getAllContactsArray() + [userContacts]
+//
+//        let userDefaults = UserDefaults.standard
+//        userDefaults.set(userContactsArray, forKey: ViewController.contactKey)
         self.getAllContacts()
     }
     
@@ -116,7 +120,7 @@ class ViewController: UIViewController {
         
         var dictionary: [String: [Contact]] = [:]
         
-        let allContacts = getAllContactsStruct()
+        let allContacts = contactManager.getAllContactsStruct()
         
         allContacts.forEach{ contact in
             var key: String!
@@ -155,6 +159,7 @@ class ViewController: UIViewController {
 
     }
     
+    // Извлечение контакта из массива arrayOfContactGroup
     func getContact(indexPath:IndexPath) -> Contact {
         let contactGroup = allContactsArrayOfDictionaries[indexPath.section]
         let contact = contactGroup.contacts[indexPath.row]
@@ -162,11 +167,26 @@ class ViewController: UIViewController {
 
     }
     
-    func getAllContactsArray() -> [[String:Any]] {
-        let userDefaults = UserDefaults.standard
-        let array = userDefaults.array(forKey: ViewController.contactKey) as? [[String:Any]]
-        return array ?? []
+    // Удаляет ячейку с выбранным IndexPath и контакт из базы данных
+    
+    func deleteContact(indexPath:IndexPath) {
+        
+        // Удаление и присвоение удаленного объекта в константу deletedContact
+                // Как это работает?
+                //   1. Извлекается ContactGroup с указанной секцией из массива arrayOfContactGroup
+                //   2. Идет обращение к атрибуту contacts у извлеченного ContactGroup
+                //   3. Вызывается метод remove(at: indexPath.row) у массива из Contact, где передается индекс. Таким образом удаляется выбранный контакт и присаевается к константе deletedContact
+        
+        let deletedContact = allContactsArrayOfDictionaries[indexPath.section].contacts.remove(at: indexPath.row)
+        
+        if allContactsArrayOfDictionaries[indexPath.section].contacts.count < 1 {
+            allContactsArrayOfDictionaries.remove(at: indexPath.section)
+        }
+        
+        // Здесь уже идет удаление контакта из базы данных
+        contactManager.delete(contactToDelete: deletedContact)
     }
+    
     
     @IBAction func addUserAction(_ sender: Any) {
         addContactAlert()
@@ -187,56 +207,19 @@ class ViewController: UIViewController {
 //        return text
 //    }
     
-    func saveContactAsStruct(firstName: String, lastName: String, phone: String) {
-        let userContact: Contact = Contact(firstName: firstName, lastName: lastName, phone: phone)
-        let userContactArray: [Contact] = getAllContactsStruct() + [userContact]
-        
-        do{
-            
-            let encoder = JSONEncoder()
-            let encodedData = try encoder.encode(userContactArray)
-            let userDefaults = UserDefaults.standard
-            userDefaults.set(encodedData, forKey: ViewController.contactKey)
-            
-        }catch{
-            print("Couldn't encode given [Contact] into data with error \(error.localizedDescription)")
-        }
-    }
     
-    func getAllContactsStruct() -> [Contact] {
-        var result: [Contact] = []
-        
-        let userDefaults = UserDefaults.standard
-        if let data = userDefaults.object(forKey: ViewController.contactKey) as? Data {
-            do {
-                
-                let decoder = JSONDecoder()
-                result = try decoder.decode([Contact].self, from: data)
-                
-            }catch {
-                print("couldn't decode given data to [Contact] with error: \(error.localizedDescription)")
-            }
-        }
-        
-        return result
-    }
+    
+    
+    
+    
+    
+    
+
     
     
     
 }
 
-
-extension String {
-    
-    // Возвращает 'true' если номер телефона валидный, 'false' в ином случае
-    func isValidPhoneNumber() -> Bool {
-        
-        let regEx = "^\\+(?:[0-9]?){6,14}[0-9]$"
-        let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
-        
-        return phoneCheck.evaluate(with: self)
-    }
-}
 
 // MARK: UITableViewDataSourse & UITableViewDelegate
 extension ViewController: UITableViewDataSource, UITableViewDelegate {
@@ -275,6 +258,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         viewController.text = "\(contact.firstName) \(contact.lastName)"
         navigationController?.pushViewController(viewController, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            deleteContact(indexPath: indexPath)
+        }
+    }
 }
 
 
@@ -290,3 +279,81 @@ struct ContactGroup {
     var contacts: [Contact]
 }
 
+
+struct ContactManager {
+    
+    let contactKey: String = "userContacts"
+    let userDefaults: UserDefaults = UserDefaults.standard
+    
+    // Возвращает все данные из базы данных UserDefaults.standard
+    func getAllContactsStruct() -> [Contact] {
+        var result: [Contact] = []
+        
+        let userDefaults = UserDefaults.standard
+        if let data = userDefaults.object(forKey: contactKey) as? Data {
+            do {
+                
+                let decoder = JSONDecoder()
+                result = try decoder.decode([Contact].self, from: data)
+                
+            }catch {
+                print("couldn't decode given data to [Contact] with error: \(error.localizedDescription)")
+            }
+        }
+        
+        return result
+    }
+    
+    func add(contact:Contact) {
+        var allContacts = getAllContactsStruct()
+        allContacts.append(contact)
+        
+        saveContactAsStruct(allContacts: allContacts)
+    }
+    
+    
+    // Записывает массив из Contact в UserDefaults
+    
+    func saveContactAsStruct(allContacts: [Contact]) {
+        
+        do{
+            
+            let encoder = JSONEncoder()
+            let encodedData = try encoder.encode(allContacts)
+            let userDefaults = UserDefaults.standard
+            userDefaults.set(encodedData, forKey:contactKey)
+            
+        }catch{
+            print("Couldn't encode given [Contact] into data with error \(error.localizedDescription)")
+        }
+    }
+    
+    func delete(contactToDelete:Contact) {
+        var allContacts = getAllContactsStruct()
+        
+        for index in 0..<allContacts.count {
+            let contact = allContacts[index]
+            
+            if contact.firstName == contactToDelete.firstName && contact.lastName == contactToDelete.lastName && contact.phone == contactToDelete.phone {
+                
+                allContacts.remove(at: index)
+                break
+            }
+        }
+        saveContactAsStruct(allContacts: allContacts)
+    }
+    
+ 
+}
+
+extension String {
+    
+    // Возвращает 'true' если номер телефона валидный, 'false' в ином случае
+    func isValidPhoneNumber() -> Bool {
+        
+        let regEx = "^\\+(?:[0-9]?){6,14}[0-9]$"
+        let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
+        
+        return phoneCheck.evaluate(with: self)
+    }
+}

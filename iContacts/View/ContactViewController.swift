@@ -45,6 +45,12 @@ class ContactViewController: UIViewController {
         
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        initialsContainerView.layer.cornerRadius = initialsContainerView.frame.height / 2
+    }
+    
     
     func setupContact() {
         fullNameLabel.text = text
