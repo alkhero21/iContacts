@@ -207,17 +207,6 @@ class ViewController: UIViewController {
 //        return text
 //    }
     
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
 }
 
 
@@ -255,7 +244,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         
         let viewController = ContactViewController()
         let contact = getContact(indexPath: indexPath)
-        viewController.text = "\(contact.firstName) \(contact.lastName)"
+        viewController.contact = contact
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -326,6 +315,22 @@ struct ContactManager {
         }catch{
             print("Couldn't encode given [Contact] into data with error \(error.localizedDescription)")
         }
+    }
+    
+    func edit(contactToEdit: Contact, editedContact: Contact) {
+        var allContacts = getAllContactsStruct()
+        
+        for index in 0..<allContacts.count {
+            let contact = allContacts[index]
+            
+            if contact.firstName == contactToEdit.firstName && contact.lastName == contactToEdit.lastName && contact.phone == contactToEdit.phone {
+                allContacts.remove(at: index)
+                allContacts.insert(editedContact, at: index)
+                break
+            }
+        }
+        
+        saveContactAsStruct(allContacts: allContacts)
     }
     
     func delete(contactToDelete:Contact) {

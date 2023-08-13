@@ -23,7 +23,7 @@ class ContactViewController: UIViewController {
     @IBOutlet weak var numberText: UIButton!
     
     var contact: Contact!
-    var text: String?
+    let contactManager = ContactManager()
     
     
     override func viewDidLoad() {
@@ -42,6 +42,9 @@ class ContactViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editContact))
+        
+        
         
     }
     
@@ -53,9 +56,48 @@ class ContactViewController: UIViewController {
     
     
     func setupContact() {
-        fullNameLabel.text = text
-//        initialsLabel.text = "\(contact.firstName.first!) \(contact.lastName.first!)"
-//        numberText.setTitle(contact.phone, for: .normal)
+        fullNameLabel.text = "\(contact.firstName) \(contact.lastName)"
+        initialsLabel.text = "\(contact.firstName.first!) \(contact.lastName.first!)"
+        numberText.setTitle(contact.phone, for: .normal)
+    }
+    
+    
+    @objc
+    func editContact() {
+        let alertController = UIAlertController(title: "Edit Contact", message: nil, preferredStyle: .alert)
+        alertController.addTextField { textField in
+            textField.text = self.contact.firstName
+        }
+        alertController .addTextField { textField in
+            textField.text = self.contact.lastName
+        }
+        alertController .addTextField { textField in
+            textField.text = self.contact.phone
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+            let firstName: String = alertController.textFields![0].text!
+            let lastName: String = alertController.textFields![1].text!
+            let phone: String = alertController.textFields![2].text!
+            
+            let editedContact = Contact(firstName: firstName, lastName: lastName, phone: phone)
+            self.save(editedContact: editedContact)
+            
+        }
+        
+        alertController.addAction(saveAction)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alertController.addAction(cancelAction)
+        
+        present(alertController, animated: true)
+    }
+    
+    
+    func save(editedContact: Contact) {
+        contactManager.edit(contactToEdit: contact, editedContact: editedContact)
+        contact = editedContact
+        setupContact()
     }
 
 }
